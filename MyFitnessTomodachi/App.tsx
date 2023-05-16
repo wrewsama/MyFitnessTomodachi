@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/home'
-import Food from './screens/food'
+import FoodDetails from './screens/foodDetails'
 import AddFood from './screens/addFood'
 import FoodList from './screens/foodList'
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,7 +15,7 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="Food" component={Food} />    
+                    <Stack.Screen name="FoodDetails" component={FoodDetails} />    
                     <Stack.Screen name="AddFood" component={AddFood} />    
                     <Stack.Screen name="FoodList" component={FoodList} />    
                 </Stack.Navigator>

@@ -13,18 +13,18 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
             id: 1,
             name: "dummy1",
             unit: "g",
-            calories: 500,
-            protein: 40,
-            carbohydrates: 30,
-            fat: 20
+            calories: 50,
+            protein: 4,
+            carbohydrates: 3,
+            fat: 2
         }, {
             id: 2,
             name: "dummy2",
             unit: "g",
-            calories: 400,
-            protein: 30,
-            carbohydrates: 50,
-            fat: 25
+            calories: 40,
+            protein: 3,
+            carbohydrates: 5,
+            fat: 2.5
         }
     ])
 
@@ -55,9 +55,12 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
                 </Heading>
                 {
                     foods.map(food => {
+                        const params = { food: food }
                         return <FoodEntry key={food.id}
                                           food={food}
-                                          qty={counts.get(food.id) as number} />
+                                          qty={counts.get(food.id) as number} 
+                                          redirect={() => navigation.push("FoodDetails", params)}
+                                          />
                     })
                 }
             </VStack>

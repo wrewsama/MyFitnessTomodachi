@@ -5,11 +5,12 @@ import { TouchableOpacity } from "react-native";
 type FoodEntryProp = {
     food: Food,
     qty: number
+    redirect: Function
 }
 
-export default function FoodEntry({ food, qty }: FoodEntryProp) {
+export default function FoodEntry({ food, qty, redirect }: FoodEntryProp) {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => redirect()}>
             <HStack display="flex" justifyContent="space-between" paddingBottom="10px">
                 <Box paddingLeft="10px">
                     <Text bold>
@@ -21,7 +22,7 @@ export default function FoodEntry({ food, qty }: FoodEntryProp) {
                 </Box>
                 <Box paddingRight="10px">
                     <Text>
-                        {food.calories}
+                        {qty * food.calories}
                     </Text>
                 </Box>
             </HStack>
