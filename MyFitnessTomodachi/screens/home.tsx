@@ -47,6 +47,14 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
         totalFat += food.fat * qty
     }
 
+    const addFood = (food: Food, quantity: number) => {
+        if (!counts.has(food.id)) {
+            counts.set(food.id, 0)
+            setFoods([...foods, food])
+        }
+        counts.set(food.id, counts.get(food.id) || 0 + quantity)
+    }
+
 
     return (
         <Box>
@@ -71,14 +79,13 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
                         return <FoodEntry key={food.id}
                                           food={food}
                                           qty={counts.get(food.id) as number} 
-                                          redirect={() => navigation.push("FoodDetails", params)}
                                           />
                     })
                 }
             </VStack>
             <Button colorScheme="primary" 
                     variant="outline"
-                    onPress={() => navigation.navigate('FoodList')}>
+                    onPress={() => navigation.navigate('FoodList', { addFood })}>
                 Add Food
             </Button>
         </Box>
