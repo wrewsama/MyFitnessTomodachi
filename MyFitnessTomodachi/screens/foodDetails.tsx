@@ -1,27 +1,88 @@
-import { Box, HStack, Input, InputGroup, InputRightAddon, Text, VStack } from "native-base";
+import { Alert, Box, Button, HStack, Icon, Input, InputGroup, InputRightAddon, Text, VStack } from "native-base";
 import { Food } from "../types/food";
 import type { HomeStackParamList } from "../types/HomeStackParamList";
 import type { RouteProp } from "@react-navigation/native";
 import { useState } from "react";
+import { Ionicons } from '@expo/vector-icons'
 
 
 type FoodDetailsRouteProp = RouteProp<HomeStackParamList, "FoodDetails">
 type FoodDetailsProp = { route : FoodDetailsRouteProp }
 export default function FoodDetails({ route }: FoodDetailsProp) {
     const { food } = route.params as { food: Food } 
+
+    // Use States
     const [calories, setCalories] = useState(food.calories.toString())
     const [protein, setProtein] = useState(food.protein.toString())
     const [carbs, setCarbs] = useState(food.carbohydrates.toString())
     const [fat, setFat] = useState(food.fat.toString())
     const [unit, setUnit] = useState(food.unit)
+    const [error, setError] = useState(false)
 
+    // change handlers
     const handleCalChange = (text: string) => setCalories(text)
     const handleProteinChange = (text: string) => setProtein(text)
     const handleCarbChange = (text: string) => setCarbs(text)
     const handleFatChange = (text: string) => setFat(text)
     const handleUnitChange = (text: string) => setUnit(text)
+
+    // button handlers
+    const onSave = () => {
+        let newCal: number
+        let newProtein: number
+        let newCarbs: number
+        let newFat: number
+        newCal = parseFloat(calories)
+        newProtein = parseFloat(protein)
+        newCarbs = parseFloat(carbs)
+        newFat = parseFloat(fat)
+
+        // checking for invalid (not number) inputs
+        if ([newCal, newProtein, newCarbs, newFat].some(isNaN)) {
+            setError(true)
+            return
+        } 
+
+        setError(false)
+
+        const newFood: Food = {
+            id: food.id,
+            name: food.name,
+            calories: newCal,
+            protein: newProtein,
+            carbohydrates: newCarbs,
+            fat: newFat,
+            unit: unit
+        }
+
+        // TODO: POST to backend
+        console.log(newFood)
+    }
+
+    const onDelete = () => {
+        console.log("delete")
+    }
     return (
         <Box padding="10px">
+            {
+                error && (
+                    <Alert status='error' colorScheme='error'>
+                        <HStack >
+                            <Icon 
+                                mr='2'
+                                size='5'
+                                color='danger'
+                                as={
+                                    <Ionicons name="alert-circle-outline" />
+                                }
+                             />
+                            <Text>
+                                Invalid Input
+                            </Text>
+                        </HStack>
+                    </Alert>
+                )
+            }
             <VStack>
                 <HStack justifyContent="space-between">
                     <Text fontSize="lg">
@@ -89,6 +150,18 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                      />
                 </HStack>
             </VStack>
+            <Button 
+                marginTop="10px"
+                onPress={onSave}
+            >
+                Save
+            </Button>
+            <Button 
+                colorScheme="danger"
+                onPress={onDelete}
+            >
+                Delete
+            </Button>
         </Box>
     )
 }
