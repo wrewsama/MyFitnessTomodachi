@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/home'
 import FoodDetails from './screens/foodDetails'
 import AddFood from './screens/addFood'
@@ -15,7 +14,11 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="FoodDetails" component={FoodDetails} />    
+                    <Stack.Screen
+                        name="FoodDetails"
+                        component={FoodDetails}
+                        options={({ route }: { route: any }) => ({ title: route.params.food.name })}
+                    />    
                     <Stack.Screen name="AddFood" component={AddFood} />    
                     <Stack.Screen name="FoodList" component={FoodList} />    
                 </Stack.Navigator>
@@ -23,12 +26,3 @@ export default function App() {
         </NativeBaseProvider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
