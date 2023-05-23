@@ -35,18 +35,30 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
     counts.set(1, 42)
     counts.set(2, 69)
 
+    let totalCal = 0
+    let totalProtein = 0
+    let totalCarbs = 0
+    let totalFat = 0
+    for (const food of foods) {
+        const qty = counts.get(food.id) as number
+        totalCal += food.calories * qty 
+        totalProtein += food.protein * qty
+        totalCarbs += food.carbohydrates * qty
+        totalFat += food.fat * qty
+    }
+
 
     return (
         <Box>
             <HStack justifyContent="center" padding={"30px"}>
                 <Center width={"50%"}>
                     <Text fontSize="xl"> Calories </Text>
-                    <Heading fontSize='4xl'> 6969 </Heading>
+                    <Heading fontSize='4xl'> {totalCal} </Heading>
                 </Center>
                 <VStack width={"50%"}>
-                    <Text fontSize="lg"> Protein: 69g </Text>
-                    <Text fontSize="lg"> Carbs: 69g </Text>
-                    <Text fontSize="lg"> Fat: 69g </Text>
+                    <Text fontSize="lg"> Protein: {totalProtein}g</Text>
+                    <Text fontSize="lg"> Carbs: {totalCarbs}g </Text>
+                    <Text fontSize="lg"> Fat: {totalFat}g </Text>
                 </VStack>
             </HStack>
             <VStack>
