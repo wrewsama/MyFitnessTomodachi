@@ -93,6 +93,7 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                             w="80%"
                             value={calories}
                             onChangeText={handleCalChange}
+                            keyboardType="numeric"
                         />
                         <InputRightAddon children={"cal"} />
                     </InputGroup>
@@ -106,6 +107,7 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                             w="80%"
                             value={protein}
                             onChangeText={handleProteinChange}
+                            keyboardType="numeric"
                         />
                         <InputRightAddon children={"g"} />
                     </InputGroup>
@@ -119,6 +121,7 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                             w="80%"
                             value={carbs}
                             onChangeText={handleCarbChange}
+                            keyboardType="numeric"
                         />
                         <InputRightAddon children={"g"} />
                     </InputGroup>
@@ -132,6 +135,7 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                             w="80%"
                             value={fat}
                             onChangeText={handleFatChange}
+                            keyboardType="numeric"
                         />
                         <InputRightAddon children={"g"} />
                     </InputGroup>
@@ -142,9 +146,8 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
                     </Text>
                     <Input
                         size="lg"
-                        w='10%'
-                        marginRight="10px"
-                        variant="unstyled"
+                        w='48%'
+                        marginRight="46px"
                         value={unit.toString()}
                         onChangeText={handleUnitChange}
                      />
