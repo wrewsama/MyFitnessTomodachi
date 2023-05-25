@@ -1,6 +1,5 @@
 import { Box, HStack, Text } from "native-base";
 import { Food } from "../types/food";
-import { TouchableOpacity } from "react-native";
 
 type FoodEntryProp = {
     food: Food,

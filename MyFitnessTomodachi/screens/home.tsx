@@ -5,10 +5,11 @@ import { useState } from "react";
 import { Food } from "../types/food";
 import FoodEntry from "../components/foodEntry";
 
+type FoodWithQuantity = Food & { quantity: number }
 type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList,
                                                           'Home'>
 export default function Home({ navigation }: { navigation: HomeScreenNavigationProp}) {
-    const [foods, setFoods] = useState<Food[]>([
+    const [foods, setFoods] = useState<FoodWithQuantity[]>([
         {
             id: 1,
             name: "dummy1",
@@ -16,7 +17,8 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
             calories: 50,
             protein: 4,
             carbohydrates: 3,
-            fat: 2
+            fat: 2,
+            quantity: 42
         }, {
             id: 2,
             name: "dummy2",
@@ -24,35 +26,28 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
             calories: 40,
             protein: 3,
             carbohydrates: 5,
-            fat: 2.5
+            fat: 2.5,
+            quantity: 69
         }
     ])
 
-    const counts = new Map<number, number>()
-
-    // ADDING THE DUMMY DATA
-    // TODO: remove after connecting to api
-    counts.set(1, 42)
-    counts.set(2, 69)
 
     let totalCal = 0
     let totalProtein = 0
     let totalCarbs = 0
     let totalFat = 0
     for (const food of foods) {
-        const qty = counts.get(food.id) as number
-        totalCal += food.calories * qty 
-        totalProtein += food.protein * qty
-        totalCarbs += food.carbohydrates * qty
-        totalFat += food.fat * qty
+        totalCal += food.calories * food.quantity
+        totalProtein += food.protein * food.quantity
+        totalCarbs += food.carbohydrates * food.quantity
+        totalFat += food.fat * food.quantity
     }
 
     const addFood = (food: Food, quantity: number) => {
-        if (!counts.has(food.id)) {
-            counts.set(food.id, 0)
-            setFoods([...foods, food])
-        }
-        counts.set(food.id, counts.get(food.id) || 0 + quantity)
+        // if the food is already in the list (check by id)
+        // we increment the quantity 
+
+        // else we insert the food and its quantity
     }
 
 
@@ -78,7 +73,7 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
                         const params = { food: food }
                         return <FoodEntry key={food.id}
                                           food={food}
-                                          qty={counts.get(food.id) as number} 
+                                          qty={food.quantity} 
                                           />
                     })
                 }
