@@ -9,28 +9,7 @@ type FoodWithQuantity = Food & { quantity: number }
 type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList,
                                                           'Home'>
 export default function Home({ navigation }: { navigation: HomeScreenNavigationProp}) {
-    const [foods, setFoods] = useState<FoodWithQuantity[]>([
-        {
-            id: 1,
-            name: "dummy1",
-            unit: "g",
-            calories: 50,
-            protein: 4,
-            carbohydrates: 3,
-            fat: 2,
-            quantity: 42
-        }, {
-            id: 2,
-            name: "dummy2",
-            unit: "g",
-            calories: 40,
-            protein: 3,
-            carbohydrates: 5,
-            fat: 2.5,
-            quantity: 69
-        }
-    ])
-
+    const [foods, setFoods] = useState<FoodWithQuantity[]>([])
 
     let totalCal = 0
     let totalProtein = 0
@@ -44,10 +23,21 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
     }
 
     const addFood = (food: Food, quantity: number) => {
-        // if the food is already in the list (check by id)
-        // we increment the quantity 
+        const foodEntry = foods.find(f => f.id === food.id)
 
-        // else we insert the food and its quantity
+        // if the food is already in the list (check by id)
+        if (foodEntry) {
+            // we increment the quantity 
+            const newFoodEntry = Object.assign({}, foodEntry)
+            newFoodEntry.quantity += 1
+            const newFoods = [...foods.filter(f => f.id !== food.id), newFoodEntry]
+            setFoods(newFoods) 
+
+        } else {
+            // else we insert the food and its quantity
+            const newFoodEntry = { ...food, quantity }
+            setFoods([...foods, newFoodEntry])
+        }
     }
 
 
