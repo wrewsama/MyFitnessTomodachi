@@ -32,7 +32,7 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
         if (foodEntry) {
             // we increment the quantity 
             const newFoodEntry = Object.assign({}, foodEntry)
-            newFoodEntry.quantity += 1
+            newFoodEntry.quantity += quantity 
             const newFoods = [...foods.filter(f => f.id !== food.id), newFoodEntry]
             setFoods(newFoods) 
 
