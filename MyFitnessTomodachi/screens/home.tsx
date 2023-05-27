@@ -1,15 +1,18 @@
-import { Box, Button, HStack, VStack, Center, Heading, Text } from "native-base"
+import { Box, Button, HStack, VStack, Center, Heading, Text, Modal } from "native-base"
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { HomeStackParamList } from "../types/HomeStackParamList";
 import { useState } from "react";
 import { Food } from "../types/food";
 import FoodEntry from "../components/foodEntry";
+import { TouchableOpacity } from "react-native";
 
 type FoodWithQuantity = Food & { quantity: number }
 type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList,
                                                           'Home'>
 export default function Home({ navigation }: { navigation: HomeScreenNavigationProp}) {
     const [foods, setFoods] = useState<FoodWithQuantity[]>([])
+    const [selectedFoodId, setSelectedFoodId] = useState(0)
+    const [showModal, setShowModal] = useState(false)
 
     let totalCal = 0
     let totalProtein = 0
@@ -40,6 +43,9 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
         }
     }
 
+    const deleteSelectedFood = () => {
+        setFoods(foods.filter(f => f.id !== selectedFoodId))
+    }
 
     return (
         <Box>
@@ -61,13 +67,50 @@ export default function Home({ navigation }: { navigation: HomeScreenNavigationP
                 {
                     foods.map(food => {
                         const params = { food: food }
-                        return <FoodEntry key={food.id}
-                                          food={food}
-                                          qty={food.quantity} 
-                                          />
+                        return (
+                            <Box key={food.id}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate("FoodDetails", params)}
+                                    onLongPress={() => {
+                                        setSelectedFoodId(food.id)
+                                        setShowModal(true)
+                                    }}
+                                >
+                                    <FoodEntry
+                                        food={food}
+                                        qty={food.quantity} 
+                                    />
+                                </TouchableOpacity>
+                            </Box>
+                        )
                     })
                 }
             </VStack>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                    <Modal.Header>
+                        Delete Food?  
+                    </Modal.Header> 
+
+                    <Modal.Footer>
+                        <Button.Group>
+                            <Button
+                                variant='ghost'
+                                colorScheme='blueGray'
+                                onPress={() => setShowModal(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button onPress={() => {
+                                deleteSelectedFood()
+                                setShowModal(false)
+                            }}>
+                               Delete 
+                            </Button>
+                        </Button.Group>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
             <Button colorScheme="primary" 
                     variant="outline"
                     onPress={() => navigation.navigate('FoodList', { addFood })}>
