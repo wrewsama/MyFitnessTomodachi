@@ -38,6 +38,11 @@ export default function FoodList({ route, navigation }: Props) {
             fat: 37
         }
     ])
+    const [selectedFood, setSelectedFood] = useState<null | Food>(null)
+    const [showModal, setShowModal] = useState(false)
+    const [quantity, setQuantity] = useState('')
+
+    const handleQuanityChange = (text: string) => setQuantity(text)
 
     return (
         <Box>
@@ -59,15 +64,13 @@ export default function FoodList({ route, navigation }: Props) {
             <VStack>
                 {
                     foods.map(food => {
-                        const [showModal, setShowModal] = useState(false)
-                        const [quantity, setQuantity] = useState('')
                         const params = { food: food }
 
-                        const handleQuanityChange = (text: string) => setQuantity(text)
                         return (
                             <Box>
                                 <TouchableOpacity
                                     onPress={() => {
+                                        setSelectedFood(food)
                                         setShowModal(true)
                                     }}
                                     onLongPress={() => navigation.navigate("FoodDetails", params)}
@@ -78,55 +81,57 @@ export default function FoodList({ route, navigation }: Props) {
                                         qty={1} 
                                     />
                                 </TouchableOpacity>
-                                <Modal isOpen={showModal} onClose={()=>setShowModal(false)}>
-                                    <Modal.Content maxWidth="400px">
-                                        <Modal.Header>
-                                            {food.name} 
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <HStack alignItems='center' justifyContent="space-between">
-                                                <Text>
-                                                    Quantity: 
-                                                </Text>
-                                                <InputGroup w="60%">
-                                                    <Input
-                                                        w="80%"
-                                                        value={quantity}
-                                                        onChangeText={handleQuanityChange}
-                                                        keyboardType="numeric"
-                                                    />
-                                                    <InputRightAddon children={food.unit} />
-                                                </InputGroup>
-                                            </HStack>
-                                        </Modal.Body>
-                                        <Modal.Footer>
-                                            <Button.Group>
-                                                <Button
-                                                    variant='ghost'
-                                                    colorScheme='blueGray'
-                                                    onPress={() => setShowModal(false)}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                                <Button onPress={() => {
-                                                    let qtyInt = parseInt(quantity)
-                                                    if (isNaN(qtyInt)) {
-                                                        qtyInt = 0
-                                                    }
-                                                    addFood(food, qtyInt)
-                                                    setShowModal(false)
-                                                }}>
-                                                    Save
-                                                </Button>
-                                            </Button.Group>
-                                        </Modal.Footer>
-                                    </Modal.Content>
-                                </Modal>
                             </Box>
                         )
                     })
                 }
             </VStack>
+            <Modal isOpen={showModal} onClose={()=>setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                    <Modal.Header>
+                        {selectedFood ? selectedFood.name : ''} 
+                    </Modal.Header>
+                    <Modal.Body>
+                        <HStack alignItems='center' justifyContent="space-between">
+                            <Text>
+                                Quantity: 
+                            </Text>
+                            <InputGroup w="60%">
+                                <Input
+                                    w="80%"
+                                    value={quantity}
+                                    onChangeText={handleQuanityChange}
+                                    keyboardType="numeric"
+                                />
+                                <InputRightAddon
+                                    children={selectedFood ? selectedFood.unit : ''}
+                                />
+                            </InputGroup>
+                        </HStack>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button.Group>
+                            <Button
+                                variant='ghost'
+                                colorScheme='blueGray'
+                                onPress={() => setShowModal(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button onPress={() => {
+                                let qtyInt = parseInt(quantity)
+                                if (isNaN(qtyInt)) {
+                                    qtyInt = 0
+                                }
+                                addFood(selectedFood, qtyInt)
+                                setShowModal(false)
+                            }}>
+                                Save
+                            </Button>
+                        </Button.Group>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
             <Button onPress={() => navigation.navigate('AddFood')}> add food </Button>
         </Box>
     )
