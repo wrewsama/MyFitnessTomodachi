@@ -37,7 +37,7 @@ Home Page
 ![image](https://github.com/wrewsama/MyFitnessTomodachi/assets/92683142/41aad9fe-54bc-43b6-b976-fee4d7861539)
 
 Food List
-https://media.discordapp.net/attachments/561045180753510451/1112343630892507216/Screenshot_20230528_193405_Expo_Go.jpg?width=317&height=669
+![image](https://github.com/wrewsama/MyFitnessTomodachi/assets/92683142/a509bf12-b15d-4ea0-b26e-a53e4f98a179)
 
 Searching 
 ![image](https://github.com/wrewsama/MyFitnessTomodachi/assets/92683142/da3f2c23-a2f6-4755-9a66-dddc3efe3b4a)
