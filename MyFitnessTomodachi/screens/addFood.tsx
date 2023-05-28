@@ -1,6 +1,7 @@
 import { Alert, Box, Button, HStack, Icon, Input, InputGroup, InputRightAddon, Text, VStack } from "native-base";
 import { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
+import Api from "../api/api";
 
 export default function AddFood() {
     // Use States
@@ -41,15 +42,21 @@ export default function AddFood() {
         setError(false)
 
         // Save to backend
-        console.log({
+        const newFood = {
             name,
             calories: newCal,
             protein: newProtein,
             carbohydrates: newCarbs,
             fat: newFat,
             unit
-        })
-        setCompleted(true)
+        }
+        Api.addFood(newFood)
+            .then(res => {
+                setCompleted(true)
+            })
+            .catch(e => {
+                console.error(e)
+            })
     }
 
     return (

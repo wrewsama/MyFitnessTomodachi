@@ -17,4 +17,8 @@ export default class Api {
     static getFoodsBySearchParam(param: string) {
         return http.get(`/food?name=${param}`)
     }
+
+    static addFood(food: Omit<Food, "id">) {
+        return http.post("/food", food)
+    }
 }

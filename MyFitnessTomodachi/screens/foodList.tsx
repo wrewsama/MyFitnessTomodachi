@@ -20,17 +20,21 @@ export default function FoodList({ route, navigation }: Props) {
     const [searchParam, setSearchParam] = useState('')
 
     const handleQuanityChange = (text: string) => setQuantity(text)
+    const updateFoods = () => {
+        setSearchParam('')
+        Api.getAllFoods()
+            .then(res => {
+                const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
+                setFoods(newFoods)
+            })
+            .catch(e => {
+                console.error(e)
+            })
+    }
     const handleSearchParamChange = (text: string) => {
         setSearchParam(text)
         if (text === "") {
-            Api.getAllFoods()
-                .then(res => {
-                    const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
-                    setFoods(newFoods)
-                })
-                .catch(e => {
-                    console.error(e)
-                })
+            updateFoods()
         } else {
             Api.getFoodsBySearchParam(searchParam)
                 .then(res => {
@@ -44,14 +48,7 @@ export default function FoodList({ route, navigation }: Props) {
     }
 
     useEffect(() => {
-        Api.getAllFoods()
-            .then(res => {
-                const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
-                setFoods(newFoods)
-            })
-            .catch(e => {
-                console.error(e)
-            })
+        updateFoods()
     }, [])
 
     return (
