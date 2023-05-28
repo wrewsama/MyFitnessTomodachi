@@ -2,47 +2,34 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { HomeStackParamList } from "../types/HomeStackParamList";
 import { Box, Button, Text, Icon, Input, VStack, Modal, FormControl, HStack, InputGroup, InputRightAddon } from "native-base";
 import { Ionicons } from '@expo/vector-icons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Food } from '../types/food';
 import FoodEntry from '../components/foodEntry';
 import { TouchableOpacity } from 'react-native';
+import Api from '../api/api';
+import Mapper from '../utils/mapper';
 
 type Props = NativeStackScreenProps<HomeStackParamList,
                                     'FoodList'>
 export default function FoodList({ route, navigation }: Props) {
     const { addFood } = route.params as { addFood: Function}
-    const [foods, setFoods] = useState<Food[]>([
-        {
-            id: 1,
-            name: "dummy1",
-            unit: "g",
-            calories: 50,
-            protein: 4,
-            carbohydrates: 3,
-            fat: 2
-        }, {
-            id: 2,
-            name: "dummy2",
-            unit: "g",
-            calories: 40,
-            protein: 3,
-            carbohydrates: 5,
-            fat: 2.5
-        }, {
-            id: 3,
-            name: "dummy3",
-            unit: "l",
-            calories: 500,
-            protein: 200,
-            carbohydrates: 69,
-            fat: 37
-        }
-    ])
+    const [foods, setFoods] = useState<Food[]>([])
     const [selectedFood, setSelectedFood] = useState<null | Food>(null)
     const [showModal, setShowModal] = useState(false)
     const [quantity, setQuantity] = useState('')
 
     const handleQuanityChange = (text: string) => setQuantity(text)
+
+    useEffect(() => {
+        Api.getAllFoods()
+            .then(res => {
+                const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
+                setFoods(newFoods)
+            })
+            .catch(e => {
+                console.error(e)
+            })
+    })
 
     return (
         <Box>
@@ -67,14 +54,13 @@ export default function FoodList({ route, navigation }: Props) {
                         const params = { food: food }
 
                         return (
-                            <Box>
+                            <Box key={food.id}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         setSelectedFood(food)
                                         setShowModal(true)
                                     }}
                                     onLongPress={() => navigation.navigate("FoodDetails", params)}
-                                    key={food.id}
                                 >
                                     <FoodEntry
                                         food={food}
