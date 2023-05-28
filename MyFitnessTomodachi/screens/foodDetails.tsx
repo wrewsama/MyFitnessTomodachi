@@ -47,8 +47,7 @@ export default function FoodDetails({ route, navigation }: Props) {
 
         setError(false)
 
-        const newFood: Food = {
-            id: food.id,
+        const newFood = {
             name: food.name,
             calories: newCal,
             protein: newProtein,
@@ -57,8 +56,14 @@ export default function FoodDetails({ route, navigation }: Props) {
             unit: unit
         }
 
-        // TODO: POST to backend
-        console.log(newFood)
+        // Update backend
+        Api.updateFood(food.id, newFood)
+            .then(res => {
+                navigation.pop()
+            })
+            .catch(e => {
+                console.error(e)
+            })
     }
 
     const onDelete = () => {
