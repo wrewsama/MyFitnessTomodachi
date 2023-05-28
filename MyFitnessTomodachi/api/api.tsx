@@ -21,4 +21,8 @@ export default class Api {
     static addFood(food: Omit<Food, "id">) {
         return http.post("/food", food)
     }
+
+    static deleteFood(id: number) {
+        return http.delete(`/food/${id}`)
+    }
 }

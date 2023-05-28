@@ -1,15 +1,17 @@
 import { Alert, Box, Button, HStack, Icon, Input, InputGroup, InputRightAddon, Text, VStack } from "native-base";
 import { Food } from "../types/food";
 import type { HomeStackParamList } from "../types/HomeStackParamList";
-import type { RouteProp } from "@react-navigation/native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
+import Api from "../api/api";
 
 
-type FoodDetailsRouteProp = RouteProp<HomeStackParamList, "FoodDetails">
-type FoodDetailsProp = { route : FoodDetailsRouteProp }
-export default function FoodDetails({ route }: FoodDetailsProp) {
-    const { food } = route.params as { food: Food } 
+type Props = NativeStackScreenProps<HomeStackParamList,
+                                    'FoodDetails'>
+type Params = { food: Food }
+export default function FoodDetails({ route, navigation }: Props) {
+    const { food } = route.params as Params
 
     // Use States
     const [calories, setCalories] = useState(food.calories.toString())
@@ -60,7 +62,13 @@ export default function FoodDetails({ route }: FoodDetailsProp) {
     }
 
     const onDelete = () => {
-        console.log("delete")
+        Api.deleteFood(food.id)
+            .then(res => {
+                navigation.pop()
+            })
+            .catch(e => {
+                console.error(e)
+            })
     }
     return (
         <Box padding="10px">

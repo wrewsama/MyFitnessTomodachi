@@ -73,7 +73,9 @@ export default function FoodList({ route, navigation }: Props) {
             <VStack>
                 {
                     foods.map(food => {
-                        const params = { food: food }
+                        const params = {
+                            food: food,
+                        }
 
                         return (
                             <Box key={food.id}>
