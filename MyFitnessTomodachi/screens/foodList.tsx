@@ -17,8 +17,31 @@ export default function FoodList({ route, navigation }: Props) {
     const [selectedFood, setSelectedFood] = useState<null | Food>(null)
     const [showModal, setShowModal] = useState(false)
     const [quantity, setQuantity] = useState('')
+    const [searchParam, setSearchParam] = useState('')
 
     const handleQuanityChange = (text: string) => setQuantity(text)
+    const handleSearchParamChange = (text: string) => {
+        setSearchParam(text)
+        if (text === "") {
+            Api.getAllFoods()
+                .then(res => {
+                    const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
+                    setFoods(newFoods)
+                })
+                .catch(e => {
+                    console.error(e)
+                })
+        } else {
+            Api.getFoodsBySearchParam(searchParam)
+                .then(res => {
+                    const newFoods = Mapper.foodResponseListToFoodList(res.data.foods)
+                    setFoods(newFoods)
+                })
+                .catch(e => {
+                    console.error(e)
+                })
+        }
+    }
 
     useEffect(() => {
         Api.getAllFoods()
@@ -29,7 +52,7 @@ export default function FoodList({ route, navigation }: Props) {
             .catch(e => {
                 console.error(e)
             })
-    })
+    }, [])
 
     return (
         <Box>
@@ -39,6 +62,8 @@ export default function FoodList({ route, navigation }: Props) {
                    borderRadius="10"
                    py="1"
                    px="2"
+                   value={searchParam}
+                   onChangeText={handleSearchParamChange}
                    InputLeftElement={
                        <Icon ml="2"
                              size="4"

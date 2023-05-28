@@ -13,4 +13,8 @@ export default class Api {
     static getAllFoods() {
         return http.get("/food")
     }
+
+    static getFoodsBySearchParam(param: string) {
+        return http.get(`/food?name=${param}`)
+    }
 }
